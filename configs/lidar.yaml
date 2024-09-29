@@ -1,0 +1,108 @@
+MODEL:
+  META_ARCHITECTURE: "GeneralizedRCNNSemanticSegmentor"
+  WEIGHTS: "detectron2://DeepLab/R-103.pkl"
+  PIXEL_MEAN: [123.675, 116.280, 103.530]
+  PIXEL_STD: [58.395, 57.120, 57.375]
+  TWO_STAGE: False
+  CIRCULAR_SEG_OBJ: True
+  BACKBONE:
+    NAME: "build_resnet_deeplab_fpn_backbone"
+    FREEZE_AT: 0
+  RESNETS:
+    DEPTH: 101
+    NORM: "BN"
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    RES5_DILATION: 1 # deeplab uses dilated convolution on "res5" but conflits with FPN
+    RES5_MULTI_GRID: [1, 2, 4]
+    STEM_MAXPOOL: False
+    STEM_TYPE: "deeplab"
+    STEM_STRIDE: 1
+    STEM_OUT_CHANNELS: 128
+    STRIDE_IN_1X1: False
+  FPN:
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+  SEM_SEG_HEAD:
+    NAME: "CustomDeepLabV3PlusHead"
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    ASPP_CHANNELS: 256
+    ASPP_DILATIONS: [6, 12, 18]
+    ASPP_DROPOUT: 0.1
+    CONVS_DIM: 256
+    NORM: "BN"
+    NUM_CLASSES: 11
+    LOSS_TYPE: "hard_pixel_mining"
+    LOSS_WEIGHT: 0.8
+    PROJECT_FEATURES: ["res2", "res3", "res4"]
+    PROJECT_CHANNELS: [48, 96, 192]
+    TOP_K_PERCENT_PIXELS: 0.2
+    LABEL_SMOOTHING: 0.0
+  ROI_HEADS:
+    NAME: "StandardROIHeads"
+    IN_FEATURES: ["p1", "p2", "p3", "p4"]
+    BATCH_SIZE_PER_IMAGE: 128 # The "RoIHead batch size". 128 is faster
+    NUM_CLASSES: 2 # The number of classes
+    SCORE_THRESH_TEST: 0.00 # set a custom testing threshold
+    NMS_THRESH_TEST: 0.5
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+    POOLER_RESOLUTION: 7
+  ANCHOR_GENERATOR:
+    SIZES: [[8], [16], [32], [64]]
+    ASPECT_RATIOS: [[0.1, 0.2, 0.4, 0.8, 1.6]]
+  RPN:
+    IN_FEATURES: ["p1", "p2", "p3", "p4"]
+    PRE_NMS_TOPK_TRAIN: 2000 # Per FPN level
+    PRE_NMS_TOPK_TEST: 1000 # Per FPN level
+    POST_NMS_TOPK_TRAIN: 1000
+    POST_NMS_TOPK_TEST: 1000
+  PROPOSAL_GENERATOR:
+    NAME: "RPN"
+
+INPUT:
+  MIN_SIZE_TRAIN: (64,)
+  MIN_SIZE_TEST: 0 # disable resizing
+  ROTATE:
+    ENABLED: True
+    ROTATE_P: 1.0
+    HFLIP_P: 0.5
+  CROP_AND_RESIZE:
+    ENABLED: True
+    CROP_LENGTH: (8, 64) # (half height, half width)
+    DROP_BOX_THRES: (5, 8) # (height, width)
+    CROP_AND_RESIZE_P: 0.5
+  SCALE_TRANSFORM:
+    ENABLED: True
+    SCALE_RANGE: (0.8, 1.2)
+    SCALE_P: 0.5
+  JITTER:
+    ENABLED: True
+    MEAN: 0.0
+    STD: 0.003
+    JITTER_P: 0.5
+
+DATASETS:
+  BASE_PATH: "./data/processed"
+  TRAIN: ("loto_train", )
+  TEST:  ("loto_test", )
+
+DATALOADER:
+  NUM_WORKERS: 4
+  ASPECT_RATIO_GROUPING: False
+  FILTER_EMPTY_ANNOTATIONS: False
+
+SOLVER:
+  NAME: AdamW
+  BASE_LR: 0.00001
+  GAMMA: 0.1 # The iteration number to decrease learning rate by GAMMA
+  STEPS: (50000, 70000) # decay learning rate
+  MAX_ITER: 90000
+  IMS_PER_BATCH: 4 # This is the real "batch size"
+  CHECKPOINT_PERIOD: 10000
+
+TEST:
+  EVAL_PERIOD: 5000
+
+VIS_PERIOD: -1
+CUDNN_BENCHMARK: True
+OUTPUT_DIR: "logs/mobicom24-loto-lidar-bs4"

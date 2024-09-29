@@ -1,0 +1,63 @@
+MODEL:
+  META_ARCHITECTURE: "DepthSnModel"
+  WEIGHTS: null # "detectron2://DeepLab/R-103.pkl"
+  CIRCULAR_DEPTH: True
+  BACKBONE:
+    NAME: "custom_unet_fpn_backbone"
+    FREEZE_AT: 0
+    NUM_BLOCKS_PER_DOWN: (4, 4, 4, 4, 4, 4, 4)
+    DIM_MULTS: (1, 2, 4, 8, 8, 8, 8)
+    STEM_OUT_CHANNELS: 64
+  FPN:
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+
+  DPETH_SN_HEAD:
+    LOSS_WEIGHT_DEPTH: 1.0
+    LOSS_WEIGHT_SN: 0.1
+    LOSS_WEIGHT_PERCEP: 0.1
+
+INPUT:
+  MIN_SIZE_TRAIN: (64,)
+  MIN_SIZE_TEST: 0 # disable resizing
+  ROTATE:
+    ENABLED: True
+    ROTATE_P: 1.0
+    HFLIP_P: 0.5
+  JITTER:
+    ENABLED: True
+    MEAN: 0.0
+    STD: 0.03
+    JITTER_P: 0.5
+  FIRST_REFL:
+    ENABLED: False # useful in small datasets
+    JITTER_P: 0.5
+
+DATASETS:
+  BASE_PATH: "./data/processed"
+  TRAIN: ("lobo_train_DRL", )
+  TEST:  ("lobo_test_DRL", )
+
+DATALOADER:
+  NUM_WORKERS: 4
+  ASPECT_RATIO_GROUPING: False
+  FILTER_EMPTY_ANNOTATIONS: False
+
+SOLVER:
+  NAME: AdamW # or SGD
+  BASE_LR: 0.0001 # 0.01
+  GAMMA: 0.1 # deprecated
+  WARMUP_ITERS: 1000
+  VALUES: (0.1, 0.01, 1, 0.1, 0.01, 1, 0.1, 0.01)
+  STEPS: (50000, 70000, 90000, 140000, 160000, 180000, 230000, 250000) # decay learning rate
+  MAX_ITER: 270000
+  IMS_PER_BATCH: 8 # this is the real "batch size"
+  CHECKPOINT_PERIOD: 10000
+  AMP:
+    ENABLED: True
+
+TEST:
+  EVAL_PERIOD: 5000
+
+VIS_PERIOD: -1
+CUDNN_BENCHMARK: True
+OUTPUT_DIR: "logs/mobicom24-lobo-DRL-unet-bs8"

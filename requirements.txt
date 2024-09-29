@@ -1,0 +1,5 @@
+torch==2.0.0
+torchvision==0.15.1
+pyiqa==0.1.6.4
+open3d==0.17.0
+cupy==12.3.0

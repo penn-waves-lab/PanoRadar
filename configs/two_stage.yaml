@@ -1,0 +1,105 @@
+MODEL:
+  META_ARCHITECTURE: "TwoStageModel"
+  TWO_STAGE: True
+  WEIGHTS: null # "../checkpoints/two_stage_11k.pth"
+  CIRCULAR_DEPTH: True
+  CIRCULAR_SEG_OBJ: True
+  BACKBONE:
+    NAME: "custom_unet_fpn_backbone"
+    FREEZE_AT: 0
+    NUM_BLOCKS_PER_DOWN: (4, 4, 4, 4, 4, 4, 4)
+    DIM_MULTS: (1, 2, 4, 8, 8, 8, 8)
+    STEM_OUT_CHANNELS: 64
+  RESNETS:
+    DEPTH: 101
+    NORM: "BN"
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    RES5_DILATION: 1 # deeplab uses dilated convolution on "res5" but conflits with FPN
+    RES5_MULTI_GRID: [1, 2, 4]
+    STEM_MAXPOOL: False
+    STEM_TYPE: "deeplab"
+    STEM_STRIDE: 1
+    STEM_OUT_CHANNELS: 128
+    STRIDE_IN_1X1: False
+  FPN:
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+  DPETH_SN_HEAD:
+    LOSS_WEIGHT_DEPTH: 100.0
+    LOSS_WEIGHT_SN: 10.0
+    LOSS_WEIGHT_PERCEP: 10.0
+  SEM_SEG_HEAD:
+    NAME: "CustomDeepLabV3PlusHead"
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    ASPP_CHANNELS: 256
+    ASPP_DILATIONS: [6, 12, 18]
+    ASPP_DROPOUT: 0.1
+    CONVS_DIM: 256
+    NORM: "BN"
+    NUM_CLASSES: 11
+    LOSS_TYPE: "hard_pixel_mining"
+    LOSS_WEIGHT: 0.8
+    PROJECT_FEATURES: ["res2", "res3", "res4"]
+    PROJECT_CHANNELS: [48, 96, 192]
+    TOP_K_PERCENT_PIXELS: 0.2
+    LABEL_SMOOTHING: 0.1
+  ROI_HEADS:
+    NAME: "StandardROIHeads"
+    IN_FEATURES: ["p1", "p2", "p3", "p4"]
+    BATCH_SIZE_PER_IMAGE: 128 # the "RoIHead batch size". 128 is faster
+    NUM_CLASSES: 2 # the number of classes
+    SCORE_THRESH_TEST: 0.00 # set a custom testing threshold
+    NMS_THRESH_TEST: 0.5
+  ANCHOR_GENERATOR:
+    SIZES: [[8], [16], [32], [64]]
+    ASPECT_RATIOS: [[0.1, 0.2, 0.4, 0.8, 1.6]]
+  RPN:
+    IN_FEATURES: ["p1", "p2", "p3", "p4"]
+    PRE_NMS_TOPK_TRAIN: 2000  # per FPN level
+    PRE_NMS_TOPK_TEST: 1000  # per FPN level
+    POST_NMS_TOPK_TRAIN: 1000
+    POST_NMS_TOPK_TEST: 1000
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+    POOLER_RESOLUTION: 7
+  PROPOSAL_GENERATOR:
+    NAME: "RPN"
+
+INPUT:
+  MIN_SIZE_TRAIN: (64,)
+  MIN_SIZE_TEST: 0 # disable resizing
+  ROTATE:
+    ENABLED: True
+    ROTATE_P: 1.0
+    HFLIP_P: 0.5
+  JITTER:
+    ENABLED: True
+    MEAN: 0.0
+    STD: 0.03
+    JITTER_P: 0.5
+
+DATASETS:
+  BASE_PATH: "./data/processed"
+  TRAIN: ("lobo_train_DRL", )
+  TEST:  ("lobo_test_DRL", )
+
+DATALOADER:
+  NUM_WORKERS: 4
+  ASPECT_RATIO_GROUPING: False
+  FILTER_EMPTY_ANNOTATIONS: False
+
+SOLVER:
+  NAME: AdamW # or SGD
+  BASE_LR: 0.0001 # 0.01
+  GAMMA: 0.1 # the iteration number to decrease learning rate by GAMMA
+  STEPS: (50000, 70000) # decay learning rate
+  MAX_ITER: 90000
+  IMS_PER_BATCH: 4 # this is the real "batch size"
+  CHECKPOINT_PERIOD: 10000
+
+TEST:
+  EVAL_PERIOD: 5000
+
+VIS_PERIOD: -1
+CUDNN_BENCHMARK: True
+OUTPUT_DIR: "logs/mobicom24-lobo-DRL-two-stage-bs4"

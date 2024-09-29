@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+
+# Logs
+logs/
+
+# dataset
+/data/
+
+# vscode settings
+.vscode/
+
+# temporary files
+temp/
