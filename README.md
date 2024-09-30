@@ -14,7 +14,7 @@ This is an official PyTorch implementation of PanoRadar for the following paper:
 > *ACM International Conference on Mobile Computing and Networking (**MobiCom**), 2024* 
 >
 
-[[`Paper`](https://dl.acm.org/doi/10.1145/3636534.3649369)] [[`Website`](https://waveslab.seas.upenn.edu/projects/panoradar)] [[`Demo Video`](https://waveslab.seas.upenn.edu/projects/panoradar)] [[`Dataset`](https://upenn.box.com/s/x8g8k5gp68dly1547z7guntcgdgaz53m)] [[`BibTeX`](#CitingPanoRadar)]
+[[`Paper`](https://dl.acm.org/doi/10.1145/3636534.3649369)] [[`Website`](https://penn-waves-lab.github.io/projects/panoradar)] [[`Demo Video`](https://penn-waves-lab.github.io/projects/panoradar)] [[`Dataset`](https://upenn.box.com/v/panoradar-dataset)] [[`BibTeX`](#CitingPanoRadar)]
 
 ---
 
@@ -53,7 +53,7 @@ For Docker users, we also provide the dockerfile to build the image. You might n
 ![actifact evaluation](./assets/images/artifact_evaluation.png)
 
 ## Dataset
-Our dataset includes two parts: the **RF Raw Data** (i.e., raw I/Q samples, inputs to the signal processing algorithms) and the **RF Processed Data** (i.e., 3D heatmaps, inputs to the machine learning models). The dataset is available [**here**](https://upenn.box.com/s/x8g8k5gp68dly1547z7guntcgdgaz53m). Below is the description:
+Our dataset includes two parts: the **RF Raw Data** (i.e., raw I/Q samples, inputs to the signal processing algorithms) and the **RF Processed Data** (i.e., 3D heatmaps, inputs to the machine learning models). The dataset is available [**here**](https://upenn.box.com/v/panoradar-dataset). Below is the description:
 
 - RF Raw Data: We recorded the RF, LiDAR, and IMU data in 12 different buildings. All of them have timestamps and are synchronized. For each building, we collected the data when the robot was moving, while for the same trajectory, "static data" were also collected (the robot remained static at one location for about 5s before moving to the next one). We trim those redundant frames in static data to reduce the size of the dataset.
 
@@ -138,7 +138,7 @@ python run.py process_raw \
 ## Training
 NOTE: we currently have not tested the code for multi-GPU support. If you encounter any problems, please feel free to open an issue.
 
-NOTE: if you like to run evaluation and inference only, **you can download the model configuration files and checkpoints** [**here**](https://upenn.box.com/s/x8g8k5gp68dly1547z7guntcgdgaz53m). You can put them under directory ./logs and jump to Evaluation section. In the following, we provide step-by-step instructions to re-train the model for one building.
+NOTE: if you like to run evaluation and inference only, **you can download the model configuration files and checkpoints** [**here**](https://upenn.box.com/v/panoradar-dataset). You can put them under directory ./logs and jump to Evaluation section. In the following, we provide step-by-step instructions to re-train the model for one building.
 
 ### Range and Surface Normal Training
 Our model training follows a two-stage regime. In the first stage, we (pre)train the range estimation model with surface normal estimation as an auxiliary task to get LiDAR-comparable range estimation.
