@@ -136,9 +136,9 @@ python run.py process_raw \
 ```
 
 ## Training
-NOTE: we currently have not tested the code for multi-GPU support. If you encounter any problems, please feel free to open an issue.
+In the following, we provide step-by-step instructions to train the model for one building.
 
-NOTE: if you like to run evaluation and inference only, **you can download the model configuration files and checkpoints** [**here**](https://upenn.box.com/v/panoradar-dataset). You can put them under directory ./logs and jump to Evaluation section. In the following, we provide step-by-step instructions to re-train the model for one building.
+NOTE: we currently have not tested the code for multi-GPU support. If you encounter any problems, please feel free to open an issue.
 
 ### Range and Surface Normal Training
 Our model training follows a two-stage regime. In the first stage, we (pre)train the range estimation model with surface normal estimation as an auxiliary task to get LiDAR-comparable range estimation.
