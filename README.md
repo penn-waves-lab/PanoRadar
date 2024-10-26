@@ -49,8 +49,8 @@ For Docker users, we also provide the dockerfile to build the image. You might n
 # run a new container
 ~$ docker run -it --gpus all -v ~/PanoRadar:/mnt/PanoRadar --shm-size=4096M panoradar /bin/bash
 ```
-## Artifact Evaluation Flow Chart
-![actifact evaluation](./assets/images/artifact_evaluation.png)
+## Pipeline
+![pipeline](./assets/images/artifact_evaluation.png)
 
 ## Dataset
 Our dataset includes two parts: the **RF Raw Data** (i.e., raw I/Q samples, inputs to the signal processing algorithms) and the **RF Processed Data** (i.e., 3D heatmaps, inputs to the machine learning models). The dataset is available [**here**](https://upenn.box.com/v/panoradar-dataset). Below is the description:
@@ -242,7 +242,7 @@ python inference.py \
   --config-file logs/mobicom24-lobo-levine-two-stage-bs4/config.yaml --mode range
 ```
 
-## ML Runtime
+## ML Runtime Profiling
 The following script will run the model on a subset of the test set to extract FLOPs and inference speed.
 ```bash
 python runtime.py \
@@ -258,7 +258,7 @@ python runtime.py \
 
 
 ## License
-The majority of PanoRadar is licensed under a [MIT License](LICENSE).
+PanoRadar is licensed under a [MIT License](LICENSE).
 
 ## <a name="CitingPanoRadar"></a>Citing PanoRadar
 If you use PanoRadar in your research, find the code useful, or would like to acknowledge our work, please consider citing our paper:
@@ -272,8 +272,3 @@ If you use PanoRadar in your research, find the code useful, or would like to ac
   doi       = {https://doi.org/10.1145/3636534.3649369},
 }
 ```
-
-## Acknowledgement
-The code is using detectron2 framework (https://github.com/facebookresearch/detectron2).
-
-We thank [Yiqiao Liao](https://github.com/yl489) for the early development of this codebase.
