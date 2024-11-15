@@ -10,11 +10,11 @@
 This is an official PyTorch implementation of PanoRadar for the following paper: <br/>
 
 > **[Enabling Visual Recognition at Radio Frequency](https://dl.acm.org/doi/10.1145/3636534.3649369)**  
-> [Haowen Lai](https://haowenlai.github.io), [Gaoxiang Luo](https://gaoxiangluo.github.io/), Yifei Liu, [Mingmin Zhao](https://www.cis.upenn.edu/~mingminz/)    
+> [Haowen Lai](https://haowenlai.github.io), [Gaoxiang Luo](https://gaoxiangluo.github.io/), [Yifei Liu](https://freddyliu06.github.io/), [Mingmin Zhao](https://www.cis.upenn.edu/~mingminz/)    
 > *ACM International Conference on Mobile Computing and Networking (**MobiCom**), 2024* 
 >
 
-[[`Paper`](https://dl.acm.org/doi/10.1145/3636534.3649369)] [[`Website`](https://penn-waves-lab.github.io/projects/panoradar)] [[`Demo Video`](https://penn-waves-lab.github.io/projects/panoradar)] [[`Dataset`](https://upenn.box.com/v/panoradar-dataset)] [[`BibTeX`](#CitingPanoRadar)]
+[[`Paper`](https://dl.acm.org/doi/10.1145/3636534.3649369)] [[`Website`](https://penn-waves-lab.github.io/projects/panoradar)] [[`Demo Video`](https://youtu.be/dKyQ1XuPorU?feature=shared)] [[`Dataset`](https://upenn.box.com/v/panoradar-dataset)] [[`BibTeX`](#CitingPanoRadar)]
 
 ---
 
