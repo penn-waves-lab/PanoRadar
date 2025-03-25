@@ -258,7 +258,7 @@ python runtime.py \
 
 
 ## License
-PanoRadar is licensed under a [MIT License](LICENSE).
+PanoRadar is licensed under a [BSD 3-Clause License](LICENSE).
 
 ## <a name="CitingPanoRadar"></a>Citing PanoRadar
 If you use PanoRadar in your research, find the code useful, or would like to acknowledge our work, please consider citing our paper:
@@ -267,7 +267,7 @@ If you use PanoRadar in your research, find the code useful, or would like to ac
 @inproceedings{PanoRadar,
   author    = {Lai, Haowen and Luo, Gaoxiang and Liu, Yifei and Zhao, Mingmin},
   title     = {Enabling Visual Recognition at Radio Frequency},
-  booktitle = {ACM International Conference on Mobile Computing (MobiCom)},
+  booktitle = {ACM International Conference on Mobile Computing and Networking (MobiCom)},
   year      = {2024},
   doi       = {https://doi.org/10.1145/3636534.3649369},
 }
