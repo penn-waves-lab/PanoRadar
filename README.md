@@ -16,6 +16,9 @@ This is an official PyTorch implementation of PanoRadar for the following paper:
 
 [[`Paper`](https://dl.acm.org/doi/10.1145/3636534.3649369)] [[`Website`](https://penn-waves-lab.github.io/projects/panoradar)] [[`Demo Video`](https://youtu.be/dKyQ1XuPorU?feature=shared)] [[`Dataset`](https://upenn.box.com/v/panoradar-dataset)] [[`BibTeX`](#CitingPanoRadar)]
 
+🌟 Best Demo Award!  
+🌟 1st Place in Student Research Competition!
+
 ---
 
 ## Overview
